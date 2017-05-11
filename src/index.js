@@ -1,28 +1,24 @@
 import wxInit from './wx/wx.js';
 import bhInit from './bh/bh.js';
 
-function isWeiXin() {
-    var ua = window.navigator.userAgent.toLowerCase();
-    return ua.indexOf('micromessenger') !== -1;
-}
-
-function isDingTalk() {
-    var ua = window.navigator.userAgent.toLowerCase();
-    return ua.indexOf('dingtalk') !== -1;
-}
-
-var sdkinit = function(callback, config) {
+let mixinSdk = null;
+export default (cb, config) => {
+  if(mixinSdk)
+    return mixinSdk;
+  mixinSdk = (cb, config) => {
+    let isWeiXin = () => /micromessenger/.test(navigator.userAgent.toLowerCase());
+    let isDingTalk = () => /dingtalk/.test(navigator.userAgent.toLowerCase());
     if (isWeiXin()) {
-        if (config.wx) {
-            wxInit(callback, config.wx);
-        }
-        return;
+      if (config.wx) {
+        wxInit(cb, config.wx);
+      }
+      return;
     }
     if (isDingTalk()) {
-        if (config.dd) {}
-        return;
+      if (config.dd) {}
+      return;
     }
-    bhInit(callback, config.https);
+    bhInit(cb, config.https);
+  }
+  return mixinSdk;
 };
-
-export default sdkinit;
