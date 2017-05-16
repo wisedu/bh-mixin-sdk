@@ -39,6 +39,11 @@ function proxyJdk(bh, mobileSDK) {
     mobileSDK.uploadImgsToEmap = function(opt) {
         return bh.wisedu.uploadToEMAP(opt.host, opt.files, opt.config || {});
     };
+    //改变标题
+    mobileSDK.setTitleText = function(opt = '') {
+      return BH_MOBILE_SDK.UI.setTitleText(opt);
+    };
+
 }
 
 export default proxyJdk;

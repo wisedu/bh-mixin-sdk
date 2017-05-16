@@ -52,6 +52,10 @@ function proxyJdk(wx, mobileSDK) {
     mobileSDK.uploadImgsToEmap = function(opt) {
         return wx.uploadImgsToEmap(opt);
     };
+    //改变标题
+    mobileSDK.setTitleText = function(opt = '') {
+      return document.title = opt;
+    };
 }
 
 export default proxyJdk;
