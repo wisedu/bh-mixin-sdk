@@ -1,4 +1,7 @@
-function proxyJdk(wx, mobileSDK) {
+import axios from 'axios';
+
+function proxyJdk(wx, mobileSDK, config) {
+    console.log('wx config', config);
     mobileSDK.wx = wx;
     //拍照
     mobileSDK.takeCamera = function(opt = {}) {
@@ -50,7 +53,63 @@ function proxyJdk(wx, mobileSDK) {
     };
     //上传图片到emap
     mobileSDK.uploadImgsToEmap = function(opt) {
-        return wx.uploadImgsToEmap(opt);
+        var uploadImage = function(localId) {
+            return new Promise(function(resolve, reject) {
+                wx.uploadImage({
+                    localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 0, // 默认为1，显示进度提示
+                    success: function(res) {
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        resolve(serverId);
+                    }
+                });
+            });
+        };
+        console.log(opt);
+        console.log(config.emapPrefixPath);
+        var defs = opt.srcs.map(function(localId) {
+            return uploadImage(localId);
+        });
+        return Promise.all(defs).then(function() {
+            let serverIds = arguments[0];
+            console.log('serverIds:', serverIds);
+
+            console.log('upload to wx success');
+            let token = opt.token;
+            let scope;
+            if (token) {
+                scope = token.substring(0, token.length - 1);
+            } else {
+                scope = new Date().getTime() + '' + parseInt(Math.random() * 100).toString();
+                token = scope + 1;
+            }
+
+            let emapPrefixPath = config.emapPrefixPath;
+            if (!/^http/.test(emapPrefixPath)) {
+                emapPrefixPath = location.origin + '/' + emapPrefixPath;
+            }
+
+            let data = {
+                accessToken: config.accessToken,
+                serverIds: serverIds,
+                emapPrefixPath: config.emapPrefixPath,
+                fileToken: token,
+                scope: scope
+            };
+
+            if (opt.cookie) {
+                data.cookie = opt.cookie;
+            }
+
+            if (opt.origin) {
+                data.origin = opt.origin;
+            }
+
+            if (opt.host) {
+                data.host = opt.host;
+            }
+            return axios.get(config.uploadImgsToEmapUrl, { params: data });
+        });
     };
     //改变标题
     mobileSDK.setTitleText = function(opt = '') {
