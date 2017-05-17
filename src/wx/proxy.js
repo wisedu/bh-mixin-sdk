@@ -65,15 +65,11 @@ function proxyJdk(wx, mobileSDK, config) {
                 });
             });
         };
-        console.log(opt);
-        console.log(config.emapPrefixPath);
         var defs = opt.srcs.map(function(localId) {
             return uploadImage(localId);
         });
         return Promise.all(defs).then(function() {
             let serverIds = arguments[0];
-            console.log('serverIds:', serverIds);
-
             console.log('upload to wx success');
             let token = opt.token;
             let scope;
