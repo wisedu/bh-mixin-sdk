@@ -18,11 +18,8 @@ function proxyJdk(bh, mobileSDK) {
         if (getType(args[0]) === 'function') {
             callback = args[0];
         }
-        return bh.systemAbility.takeCamera(isfront, function(ret) {
-            var srcs = ['data:image/jpeg;base64,' + ret.base64];
-            callback && callback({
-                srcs: srcs
-            });
+        return bh.systemAbility.takeCamera(function(ret) {
+            callback && callback(ret);
         });
     };
     //选择图片
@@ -37,15 +34,7 @@ function proxyJdk(bh, mobileSDK) {
             limit = args[1];
         }
         return bh.systemAbility.takePhoto(function(ret) {
-            var srcs = ['data:image/jpeg;base64,' + ret.base64];
-            if (ret.length) {
-                srcs = ret.map(function(item) {
-                    return 'data:image/jpeg;base64,' + item.base64;
-                });
-            }
-            callback && callback({
-                srcs: srcs
-            });
+            callback && callback(ret);
         }, limit);
     };
     //预览图片
@@ -62,7 +51,7 @@ function proxyJdk(bh, mobileSDK) {
     };
     //上传图片到emap
     mobileSDK.uploadImgsToEmap = function(opt) {
-        return bh.wisedu.uploadToEMAP(opt.host, opt.srcs, opt.config || {});
+        return bh.wisedu.uploadToEMAP(opt.host, opt.urls, opt.config || {});
     };
     //改变标题
     mobileSDK.setTitleText = function(opt = '') {

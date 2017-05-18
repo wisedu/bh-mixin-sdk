@@ -31,7 +31,10 @@ function proxyJdk(wx, mobileSDK, config) {
             sizeType: sizeType,
             sourceType: ['camera'],
             success: function(res) {
-                callback && callback({ srcs: res.localIds });
+                callback && callback({
+                    base64: res.localIds[0],
+                    url: res.localIds[0]
+                });
             }
         });
     };
@@ -60,7 +63,17 @@ function proxyJdk(wx, mobileSDK, config) {
             sizeType: sizeType,
             sourceType: ['album'],
             success: function(res) {
-                callback && callback({ srcs: res.localIds });
+                var imgs = res.localIds.map(function(item) {
+                    return {
+                        base64: item,
+                        url: item
+                    };
+                });
+                if (imgs.length > 1) {
+                    callback && callback(imgs);
+                } else {
+                    callback && callback(imgs[0]);
+                }
             }
         });
     };
@@ -113,7 +126,7 @@ function proxyJdk(wx, mobileSDK, config) {
                 });
             });
         };
-        var defs = opt.srcs.map(function(localId) {
+        var defs = opt.urls.map(function(localId) {
             return uploadImage(localId);
         });
         return Promise.all(defs).then(function() {

@@ -55,14 +55,14 @@ SDK提供了如下公共方法，并对他们的入参和出参做了兼容
 
 ```
 SDK.takeCamera(false,function(ret){
-        console.log(ret.srcs);
+        console.log(ret);
     }
 );
 ```
 
 #### callback入参
-`结构`: {srcs:[]} 
-`srcs`: 图片url列表，可以作为img标签的src属性显示图片
+`结构`: {base64:'',url:''} 
+`base64`: 图片url列表，可以作为img标签的src属性显示图片
 
 
 
@@ -72,17 +72,17 @@ SDK.takeCamera(false,function(ret){
 #### Arguments
 1. `limit`:   最大图片数，默认是1
 2. `callback`:  回调
-3. `callback`:  微信接口
+3. `sizeType`:  微信接口
 
 ```
 SDK.takePhoto(1,function(ret){
-    console.log(ret.srcs)
+    console.log(ret)
 });
 ```
 
 #### callback入参
-`结构`: {srcs:[]} 
-`srcs`: 图片url列表，可以作为img标签的src属性显示图片
+`结构`: {base64:'',url:''} || [{base64:'',url:''}] 
+`base64`: 图片url列表，可以作为img标签的src属性显示图片
 
 **`previewImages(infos:Array,showIndex:number)`**
 1.`infos`:[{url:'',desc:''}],url:图片路径，desc：图片描述，今日校园参数
@@ -126,7 +126,7 @@ SDK.scan(
 
 #### Arguments
 1.`host`:今日起校园参数，emap服务前缀，微信取初始化参数中的emapPrefixPath
-2.`srcs`:图片url，对于微信而言，url指wx.uploadImage返回的serverId
+2.`urls`:图片url，takeCamera或者takePhoto返回的url
 3.`config`:里面携带token
 
 ```
