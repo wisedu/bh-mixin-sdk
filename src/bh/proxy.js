@@ -1,16 +1,41 @@
+var getType = function(o) {
+    return Object.prototype.toString.call(o).toLocaleLowerCase().replace('[object ', '').replace(']', '');
+};
+
 function proxyJdk(bh, mobileSDK) {
     mobileSDK.bh = bh;
     //拍照
-    mobileSDK.takeCamera = function(opt = {}) {
-        return bh.systemAbility.takeCamera(opt.isfront || false, function(ret) {
+    mobileSDK.takeCamera = function() {
+        var args = arguments;
+        var callback;
+        var isfront = false;
+        if (getType(args[0]) === 'boolean') {
+            isfront = args[0];
+            if (getType(args[1]) === 'function') {
+                callback = args[1];
+            }
+        }
+        if (getType(args[0]) === 'function') {
+            callback = args[0];
+        }
+        return bh.systemAbility.takeCamera(isfront, function(ret) {
             var srcs = ['data:image/jpeg;base64,' + ret.base64];
-            opt.callback({
+            callback && callback({
                 srcs: srcs
             });
         });
     };
     //选择图片
-    mobileSDK.takePhoto = function(opt = {}) {
+    mobileSDK.takePhoto = function() {
+        var args = arguments;
+        var callback;
+        if (getType(args[0]) === 'function') {
+            callback = args[0];
+        }
+        var limit = 1;
+        if (getType(args[1]) === 'number') {
+            limit = args[1];
+        }
         return bh.systemAbility.takePhoto(function(ret) {
             var srcs = ['data:image/jpeg;base64,' + ret.base64];
             if (ret.length) {
@@ -18,32 +43,31 @@ function proxyJdk(bh, mobileSDK) {
                     return 'data:image/jpeg;base64,' + item.base64;
                 });
             }
-            opt.callback({
+            callback && callback({
                 srcs: srcs
             });
-        }, opt.limit || 1);
+        }, limit);
     };
     //预览图片
-    mobileSDK.previewImages = function(opt) {
-        return bh.UI.preViewImages(opt.infos, opt.showIndex || 0);
+    mobileSDK.previewImages = function() {
+        return bh.UI.preViewImages.apply(bh.UI, arguments);
     };
     //关闭页面
     mobileSDK.closeWebView = function() {
         return bh.UI.closeWebView();
     };
     //扫描二维码或者一维码
-    mobileSDK.scan = function(opt = {}) {
-        return bh.qrcode.scan(opt.callback, opt.keeping || false);
+    mobileSDK.scan = function() {
+        return bh.qrcode.scan.apply(bh.qrcode, arguments);
     };
     //上传图片到emap
     mobileSDK.uploadImgsToEmap = function(opt) {
-        return bh.wisedu.uploadToEMAP(opt.host, opt.files, opt.config || {});
+        return bh.wisedu.uploadToEMAP(opt.host, opt.srcs, opt.config || {});
     };
     //改变标题
     mobileSDK.setTitleText = function(opt = '') {
-      return BH_MOBILE_SDK.UI.setTitleText(opt);
+        return BH_MOBILE_SDK.UI.setTitleText(opt);
     };
-
 }
 
 export default proxyJdk;

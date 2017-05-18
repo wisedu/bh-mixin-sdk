@@ -45,21 +45,19 @@ TODO:
 
 SDK提供了如下公共方法，并对他们的入参和出参做了兼容
 
-**`takeCamera({isfront:Boolean,sizeType:Array,callback:Function})`**
+**`takeCamera(isfront:Boolean,callback:Function,sizeType:Array)`**
 唤起系统相机拍照
 
 #### Arguments
 1. `isfront`:   今日校园参数，是否开启前置摄像头，默认false
-2. `sizeType`:  微信参数，可以指定是原图还是压缩图，['original', 'compressed']，默认二者都有
-3. `callback`:  回调
+2. `callback`:  回调
+3. `callback`:  微信接口
 
 ```
-SDK.takeCamera({
-    isfront:false,
-    callback:function(ret){
+SDK.takeCamera(false,function(ret){
         console.log(ret.srcs);
     }
-});
+);
 ```
 
 #### callback入参
@@ -68,38 +66,35 @@ SDK.takeCamera({
 
 
 
-**`takePhoto({limit:Number,sizeType:Array,callback:Function})`**
+**`takePhoto(limit:Number,sizeType:Array,callback:Function,sizeType:Array)`**
 唤起系统相册
 
 #### Arguments
 1. `limit`:   最大图片数，默认是1
-2. `sizeType`:  微信参数，可以指定是原图还是压缩图，['original', 'compressed']，默认二者都有
-3. `callback`:  回调
+2. `callback`:  回调
+3. `callback`:  微信接口
 
 ```
-SDK.takePhoto({
-    limit:1,
-    callback:function(ret){
-        console.log(ret.srcs)
-    }});
+SDK.takePhoto(1,function(ret){
+    console.log(ret.srcs)
+});
 ```
 
 #### callback入参
 `结构`: {srcs:[]} 
 `srcs`: 图片url列表，可以作为img标签的src属性显示图片
 
-**`previewImages({infos:Array,showIndex:number})`**
+**`previewImages(infos:Array,showIndex:number)`**
 1.`infos`:[{url:'',desc:''}],url:图片路径，desc：图片描述，今日校园参数
 2.`showIndex`:展示第几张图片，默认是0
 
 ```
-SDK.previewImages({
-    infos:[{
+SDK.previewImages([{
         url:'',
         desc:''
     }],
-    showIndex:0
-});
+    0
+);
 ```
 
 **`closeWebView()`**
@@ -110,7 +105,7 @@ SDK.previewImages({
 SDK.closeWebView();
 ```
 
-**`scan({callback:Function,keeping:Boolean})`**
+**`scan(callback:Function,keeping:Boolean)`**
 二维码扫描
 
 #### Arguments
@@ -118,26 +113,29 @@ SDK.closeWebView();
 2.`keeping`:今日校园参数，是否持续扫描，如果是，当扫描到结果后不会立刻关闭扫描界面，还会继续扫描。默认false
 
 ```
-SDK.scan({
-    callback:function(ret){
+SDK.scan(
+    function(ret){
         console.log("扫描结果" + ret);
     },
-    keeping:false
-});
+    false
+);
 ```
 
-**`uploadImgsToEmap({host:String,files:Array,config:Object})`**
+**`uploadImgsToEmap({host:String,srcs:Array,config:Object})`**
 上传图片到emap
 
 #### Arguments
 1.`host`:今日起校园参数，emap服务前缀，微信取初始化参数中的emapPrefixPath
-2.`files`:图片url，对于微信而言，url指wx.uploadImage返回的serverId
-3.`config`:今日校园参数
+2.`srcs`:图片url，对于微信而言，url指wx.uploadImage返回的serverId
+3.`config`:里面携带token
 
 ```
 SDK.uploadImgsToEmap({
     host:'http://demoapp.wisedu.com/emap/',
-    files:['']
+    srcs:[''],
+    config:{
+        token:'990124'
+    }
 });
 ```
 

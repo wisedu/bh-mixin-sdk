@@ -1,39 +1,87 @@
 import axios from 'axios';
 
+var getType = function(o) {
+    return Object.prototype.toString.call(o).toLocaleLowerCase().replace('[object ', '').replace(']', '');
+};
+
 function proxyJdk(wx, mobileSDK, config) {
     console.log('wx config', config);
     mobileSDK.wx = wx;
     //拍照
-    mobileSDK.takeCamera = function(opt = {}) {
+    mobileSDK.takeCamera = function() {
+        var args = arguments;
+        var callback;
+        if (getType(args[0]) === 'boolean') {
+            if (getType(args[1]) === 'function') {
+                callback = args[1];
+            }
+        }
+        if (getType(args[0]) === 'function') {
+            callback = args[0];
+        }
+        var sizeType = ['original', 'compressed'];
+        if (getType(args[1]) === 'array') {
+            callback = args[1];
+        }
+        if (getType(args[2]) === 'array') {
+            sizeType = args[2];
+        }
         wx.chooseImage({
             count: 1,
-            sizeType: opt.sizeType || ['original', 'compressed'],
+            sizeType: sizeType,
             sourceType: ['camera'],
             success: function(res) {
-                opt.callback({ srcs: res.localIds });
+                callback && callback({ srcs: res.localIds });
             }
         });
     };
     //选择图片
-    mobileSDK.takePhoto = function(opt = {}) {
+    mobileSDK.takePhoto = function() {
+        var args = arguments;
+        var callback;
+        if (getType(args[0]) === 'function') {
+            callback = args[0];
+        }
+
+        var limit = 1;
+        if (getType(args[1]) === 'number') {
+            limit = args[1];
+        }
+
+        var sizeType = ['original', 'compressed'];
+        if (getType(args[1]) === 'array') {
+            sizeType = args[1];
+        }
+        if (getType(args[2]) === 'array') {
+            sizeType = args[2];
+        }
         wx.chooseImage({
-            count: opt.limit || 1,
-            sizeType: opt.sizeType || ['original', 'compressed'],
+            count: limit,
+            sizeType: sizeType,
             sourceType: ['album'],
             success: function(res) {
-                opt.callback({ srcs: res.localIds });
+                callback && callback({ srcs: res.localIds });
             }
         });
     };
     //预览图片
-    mobileSDK.previewImages = function(opt = {}) {
-        if (opt.infos && opt.infos.length) {
-            let urls = opt.infos.map(function(item) {
+    mobileSDK.previewImages = function() {
+        var args = arguments;
+        var infos = [];
+        if (getType(args[0]) === 'array') {
+            infos = args[0];
+        }
+        var showIndex = 0;
+        if (getType(args[1]) === 'number') {
+            showIndex = args[1];
+        }
+        if (infos && infos.length) {
+            let urls = infos.map(function(item) {
                 return item.url;
             });
             wx.previewImage({
                 urls: urls,
-                current: urls[opt.showIndex || 0]
+                current: urls[showIndex]
             });
         }
     };
@@ -42,12 +90,12 @@ function proxyJdk(wx, mobileSDK, config) {
         wx.closeWindow();
     };
     //扫描二维码或者一维码
-    mobileSDK.scan = function(opt = {}) {
+    mobileSDK.scan = function(callback) {
         wx.scanQRCode({
             needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
             scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
             success: function(res) {
-                opt.callback(res.resultStr);
+                callback && callback(res.resultStr);
             }
         });
     };
@@ -71,7 +119,7 @@ function proxyJdk(wx, mobileSDK, config) {
         return Promise.all(defs).then(function() {
             let serverIds = arguments[0];
             console.log('upload to wx success');
-            let token = opt.token;
+            let token = opt.config && opt.config.token;
             let scope;
             if (token) {
                 scope = token.substring(0, token.length - 1);
@@ -90,7 +138,8 @@ function proxyJdk(wx, mobileSDK, config) {
                 serverIds: serverIds,
                 emapPrefixPath: config.emapPrefixPath,
                 fileToken: token,
-                scope: scope
+                scope: scope,
+                corp: config.corp
             };
 
             if (opt.cookie) {
@@ -109,7 +158,7 @@ function proxyJdk(wx, mobileSDK, config) {
     };
     //改变标题
     mobileSDK.setTitleText = function(opt = '') {
-      return document.title = opt;
+        return document.title = opt;
     };
 }
 

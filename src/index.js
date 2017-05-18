@@ -64,7 +64,8 @@ export default (cb, config) => {
                         }, {
                             emapPrefixPath: wxConfig.emapPrefixPath,
                             accessToken: res.data.data.accessToken,
-                            uploadImgsToEmapUrl: wxConfig.uploadImgsToEmapUrl
+                            uploadImgsToEmapUrl: wxConfig.uploadImgsToEmapUrl,
+                            corp: wxConfig.corp
                         });
                     })
                     .catch((error) => {
