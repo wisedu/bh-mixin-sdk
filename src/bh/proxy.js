@@ -42,7 +42,7 @@ function proxyJdk(bh, mobileSDK) {
         }, limit);
     };
     //预览图片
-    mobileSDK.previewImages = function() {
+    mobileSDK.preViewImages = function() {
         return bh.UI.preViewImages.apply(bh.UI, arguments);
     };
     //关闭页面

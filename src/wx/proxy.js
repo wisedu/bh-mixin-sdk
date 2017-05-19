@@ -82,7 +82,7 @@ function proxyJdk(wx, mobileSDK, config) {
         });
     };
     //预览图片
-    mobileSDK.previewImages = function() {
+    mobileSDK.preViewImages = function() {
         var args = arguments;
         var infos = [];
         if (getType(args[0]) === 'array') {
