@@ -118,59 +118,69 @@ function proxyJdk(wx, mobileSDK, config) {
     };
     //上传图片到emap
     mobileSDK.uploadImgsToEmap = function(opt) {
-        var uploadImage = function(localId) {
-            return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject) {
+            var serverIds = [];
+
+            var uploadImg = function() {
+                let token = opt.config && opt.config.token;
+                let scope;
+                if (token) {
+                    scope = token.substring(0, token.length - 1);
+                } else {
+                    scope = new Date().getTime() + '' + parseInt(Math.random() * 100).toString();
+                    token = scope + 1;
+                }
+
+                let emapPrefixPath = config.emapPrefixPath;
+                if (!/^http/.test(emapPrefixPath)) {
+                    emapPrefixPath = location.origin + '/' + emapPrefixPath;
+                }
+
+                let data = {
+                    accessToken: config.accessToken,
+                    serverIds: serverIds,
+                    emapPrefixPath: config.emapPrefixPath,
+                    fileToken: token,
+                    scope: scope,
+                    corp: config.corp
+                };
+
+                data.cookie = opt.cookie || '';
+
+                if (opt.origin) {
+                    data.origin = opt.origin;
+                }
+
+                if (opt.host) {
+                    data.host = opt.host;
+                }
+
+                axios.get(config.uploadImgsToEmapUrl, { params: data }).then(function(res) {
+                    resolve(res);
+                }, function(res) {
+                    reject(res);
+                }).catch(function(res) {
+                    reject(res);
+                });
+            };
+
+            var syncUpload = function(localIds) {
+                var localId = localIds.pop();
                 wx.uploadImage({
                     localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
                     isShowProgressTips: 0, // 默认为1，显示进度提示
                     success: function(res) {
                         var serverId = res.serverId; // 返回图片的服务器端ID
-                        resolve(serverId);
+                        serverIds.push(serverId);
+                        if (localIds.length) {
+                            syncUpload(localIds);
+                        } else {
+                            uploadImg();
+                        }
                     }
                 });
-            });
-        };
-        var defs = opt.urls.map(function(localId) {
-            return uploadImage(localId);
-        });
-        return Promise.all(defs).then(function() {
-            let serverIds = arguments[0];
-            console.log('upload to wx success');
-            let token = opt.config && opt.config.token;
-            let scope;
-            if (token) {
-                scope = token.substring(0, token.length - 1);
-            } else {
-                scope = new Date().getTime() + '' + parseInt(Math.random() * 100).toString();
-                token = scope + 1;
-            }
-
-            let emapPrefixPath = config.emapPrefixPath;
-            if (!/^http/.test(emapPrefixPath)) {
-                emapPrefixPath = location.origin + '/' + emapPrefixPath;
-            }
-
-            let data = {
-                accessToken: config.accessToken,
-                serverIds: serverIds,
-                emapPrefixPath: config.emapPrefixPath,
-                fileToken: token,
-                scope: scope,
-                corp: config.corp
             };
-
-            if (opt.cookie) {
-                data.cookie = opt.cookie;
-            }
-
-            if (opt.origin) {
-                data.origin = opt.origin;
-            }
-
-            if (opt.host) {
-                data.host = opt.host;
-            }
-            return axios.get(config.uploadImgsToEmapUrl, { params: data });
+            syncUpload(opt.urls);
         });
     };
     //改变标题
