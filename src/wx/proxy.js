@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 var getType = function(o) {
-    return Object.prototype.toString.call(o).toLocaleLowerCase().replace('[object ', '').replace(']', '');
+    var type = Object.prototype.toString.call(o).toLocaleLowerCase().replace('[object ', '').replace(']', '');
+    if (type === 'object' && o && o.hasOwnProperty('length')) {
+        return 'array';
+    }
+    return type;
 };
 
 function proxyJdk(wx, mobileSDK, config) {
