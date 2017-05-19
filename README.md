@@ -1,46 +1,38 @@
 # Wisedu Mobile JavaScript SDK
 
-这是个兼容包，包含微信和今日校园的所有jdk，并且提供了公共方法，未来会补上钉钉的jdk
-内部依赖bh-mobile-sdk(今日校园)和bh-wx-sdk(微信)两个npm包
+这是个兼容包，包含微信和今日校园的所有sdk，并且提供了公共方法，未来会补上钉钉的jdk
+,内部依赖bh-mobile-sdk(今日校园)和微信的sdk
 
 
 ## 安装
 
 ```
-TODO：
 npm install bh-mixin-sdk
 ```
 
 ## 使用
 
 ```
-TODO：
 import init from 'bh-mixin-sdk'
 var config = {
-    wx:{},//微信jdk初始化参数
+    wx:{
+	    debug: false,
+	    url: 'http://res.wisedu.com:8888/checkSign',//微信认证地址
+	    corp: 'fe_test',//认证应用ID
+	 },//微信jdk初始化参数
     dd:{},//钉钉jdk初始化参数
 };
 var SDK = null;
 init((res) => {
-    console.log(res.type)
-    console.log(res.sdk)
-    if(res.type === 'success'){
-        SDK = res.sdk
-    }
+    new Vue()//项目初始实例化
 },config)
-
-微信原生api都挂在wx的命名下，如：
-//关闭当前窗口
-SDK.wx.closeWindow();
-
-今日校园原生api都挂在bh的命名下，如：
-//关闭当前窗口
-SDK.bh.UI.closeWebView()
+在使用init启动完应用之后，可以直接使用全局方法，来使用sdk
+例如：
+BH_MIXIN_SDK.UI.setTitleText('我的校园卡');
 
 TODO:
 钉钉api
 ```
-
 ## 公共API
 
 SDK提供了如下公共方法，并对他们的入参和出参做了兼容
@@ -61,7 +53,7 @@ SDK.takeCamera(false,function(ret){
 ```
 
 #### callback入参
-`结构`: {base64:'',url:''} 
+`结构`: {base64:'',url:''}
 `base64`: 图片url列表，可以作为img标签的src属性显示图片
 
 
@@ -81,7 +73,7 @@ SDK.takePhoto(1,function(ret){
 ```
 
 #### callback入参
-`结构`: {base64:'',url:''} || [{base64:'',url:''}] 
+`结构`: {base64:'',url:''} || [{base64:'',url:''}]
 `base64`: 图片url列表，可以作为img标签的src属性显示图片
 
 **`previewImages(infos:Array,showIndex:number)`**
