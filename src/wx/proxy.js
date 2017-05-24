@@ -156,11 +156,11 @@ function proxyJdk(wx, mobileSDK, config) {
                 }
 
                 axios.get(config.uploadImgsToEmapUrl, { params: data }).then(function(res) {
-                    resolve(res);
+                    resolve(res.data);
                 }, function(res) {
-                    reject(res);
+                    reject(res.data);
                 }).catch(function(res) {
-                    reject(res);
+                    reject(res.data);
                 });
             };
 
