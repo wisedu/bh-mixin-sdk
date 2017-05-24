@@ -1,6 +1,6 @@
 {
   "name": "bh-mixin-sdk",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "wisedu mixin sdk",
   "main": "lib/index.js",
   "files": [
