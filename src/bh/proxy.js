@@ -59,7 +59,11 @@ function proxyJdk(bh, mobileSDK) {
     };
     //改变标题
     mobileSDK.setTitleText = function(opt = '') {
-        return BH_MOBILE_SDK.UI.setTitleText(opt);
+        return bh.UI.setTitleText(opt);
+    };
+    //获取网络地址
+    mobileSDK.getCurrentPosition = function() {
+        bh.geolocation.getCurrentPosition.apply(bh.geolocation, arguments);
     };
 }
 
