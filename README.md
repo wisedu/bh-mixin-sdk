@@ -18,7 +18,7 @@ var config = {
     wx:{
 	    debug: false,
 	    url: 'http://res.wisedu.com:8888/checkSign',//微信认证地址
-	    corp: 'fe_test',//认证应用ID
+	    corp: 'amptest',//认证应用ID
 	 },//微信jdk初始化参数
     dd:{},//钉钉jdk初始化参数
 };
@@ -28,7 +28,7 @@ init((res) => {
 },config)
 在使用init启动完应用之后，可以直接使用全局方法，来使用sdk
 例如：
-BH_MIXIN_SDK.UI.setTitleText('我的校园卡');
+BH_MIXIN_SDK.setTitleText('我的校园卡');
 
 TODO:
 钉钉api
@@ -43,22 +43,27 @@ SDK提供了如下公共方法，并对他们的入参和出参做了兼容
 #### Arguments
 1. `isfront`:   今日校园参数，是否开启前置摄像头，默认false
 2. `callback`:  回调
-3. `callback`:  微信接口
+3. `sizeType`:  微信接口
 
 ```
 SDK.takeCamera(false,function(ret){
         console.log(ret);
     }
 );
+或
+SDK.takeCamera(function(ret){
+        console.log(ret);
+    }
+);
 ```
 
 #### callback入参
-`结构`: {base64:'',url:''}
+`结构`: {base64:'',url:''} //今日校园为数组[{base64:'',url:''}]
 `base64`: 图片url列表，可以作为img标签的src属性显示图片
 
 
 
-**`takePhoto(limit:Number,sizeType:Array,callback:Function,sizeType:Array)`**
+**`takePhoto(callback:Function,limit:Number,sizeType:Array,sizeType:Array)`**
 唤起系统相册
 
 #### Arguments
@@ -67,9 +72,9 @@ SDK.takeCamera(false,function(ret){
 3. `sizeType`:  微信接口
 
 ```
-SDK.takePhoto(1,function(ret){
+SDK.takePhoto(function(ret){
     console.log(ret)
-});
+},1);
 ```
 
 #### callback入参
@@ -124,11 +129,18 @@ SDK.scan(
 ```
 SDK.uploadImgsToEmap({
     host:'http://demoapp.wisedu.com/emap/',
-    srcs:[''],
-    config:{
-        token:'990124'
-    }
+    srcs:['']
 });
+```
+
+**`setTitleText(String)`**
+设置页面头部标题
+
+#### Arguments
+1.String，标题
+
+```
+SDK.setTitleText('移动迎新');
 ```
 
 
