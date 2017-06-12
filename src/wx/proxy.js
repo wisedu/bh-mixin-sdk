@@ -8,6 +8,10 @@ var getType = function(o) {
     return type;
 };
 
+var isIphone = function() {
+    return /iphone/.test(navigator.userAgent.toLowerCase());
+};
+
 function proxyJdk(wx, mobileSDK, config) {
     console.log('wx config', config);
     mobileSDK.wx = wx;
@@ -35,10 +39,22 @@ function proxyJdk(wx, mobileSDK, config) {
             sizeType: sizeType,
             sourceType: ['camera'],
             success: function(res) {
-                callback && callback({
-                    base64: res.localIds[0],
-                    url: res.localIds[0]
-                });
+                if (isIphone()) {
+                    wx.getLocalImgData({
+                        localId: res.localIds[0],
+                        success: function(ret) {
+                            callback && callback({
+                                base64: ret.localData,
+                                url: res.localIds[0]
+                            });
+                        }
+                    });
+                } else {
+                    callback && callback({
+                        base64: res.localIds[0],
+                        url: res.localIds[0]
+                    });
+                }
             }
         });
     };
@@ -67,16 +83,45 @@ function proxyJdk(wx, mobileSDK, config) {
             sizeType: sizeType,
             sourceType: ['album'],
             success: function(res) {
-                var imgs = res.localIds.map(function(item) {
-                    return {
-                        base64: item,
-                        url: item
+                var imgs = [];
+                var localIds = res.localIds;
+                var cb = function() {
+                    if (imgs.length > 1) {
+                        callback && callback(imgs);
+                    } else {
+                        callback && callback(imgs[0]);
+                    }
+                };
+                if (localIds.length === 0) {
+                    return callback && callback({});
+                }
+                if (isIphone()) {
+                    var getLocalImgData = function() {
+                        var localId = localIds.pop();
+                        wx.getLocalImgData({
+                            localId: localId,
+                            success: function(ret) {
+                                imgs.push({
+                                    base64: ret.localData,
+                                    url: localId
+                                });
+                                if (localIds.length) {
+                                    getLocalImgData();
+                                } else {
+                                    cb();
+                                }
+                            }
+                        });
                     };
-                });
-                if (imgs.length > 1) {
-                    callback && callback(imgs);
+                    getLocalImgData();
                 } else {
-                    callback && callback(imgs[0]);
+                    imgs = res.localIds.map(function(item) {
+                        return {
+                            base64: item,
+                            url: item
+                        };
+                    });
+                    cb();
                 }
             }
         });
