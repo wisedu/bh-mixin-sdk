@@ -58,8 +58,8 @@ SDK.takeCamera(function(ret){
 ```
 
 #### callback入参
-`结构`: {base64:'',url:''} //今日校园为数组[{base64:'',url:''}]
-`base64`: 图片url列表，可以作为img标签的src属性显示图片
+`结构`: {base64:'',url:''} 或者 [{base64:'',url:''}] //今日校园为数组[{base64:'',url:''}]
+`base64`: 可以作为img标签的src属性显示图片
 
 
 
@@ -78,8 +78,8 @@ SDK.takePhoto(function(ret){
 ```
 
 #### callback入参
-`结构`: {base64:'',url:''} || [{base64:'',url:''}]
-`base64`: 图片url列表，可以作为img标签的src属性显示图片
+`结构`: {base64:'',url:''} || [{base64:'',url:''}] //单张图片为{}，多张为数组
+`base64`: 可以作为img标签的src属性显示图片
 
 **`previewImages(infos:Array,showIndex:number)`**
 1.`infos`:[{url:'',desc:''}],url:图片路径，desc：图片描述，今日校园参数
