@@ -1,6 +1,6 @@
 {
   "name": "bh-mixin-sdk",
-  "version": "0.1.19",
+  "version": "0.1.22",
   "description": "wisedu mixin sdk",
   "main": "lib/index.js",
   "files": [
@@ -29,6 +29,6 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
-    "bh-mobile-sdk": "^0.1.48"
+    "bh-mobile-sdk": "^0.2.2"
   }
 }
