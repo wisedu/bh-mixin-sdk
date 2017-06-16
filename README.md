@@ -12,7 +12,7 @@ npm install bh-mixin-sdk
 
 ## 使用
 
-```
+```javascript
 import init from 'bh-mixin-sdk'
 var config = {
     wx:{
@@ -22,6 +22,7 @@ var config = {
 	 },//微信jdk初始化参数
     dd:{},//钉钉jdk初始化参数
 };
+
 var SDK = null;
 init((res) => {
     new Vue()//项目初始实例化
@@ -33,6 +34,24 @@ BH_MIXIN_SDK.setTitleText('我的校园卡');
 TODO:
 钉钉api
 ```
+对于微信jsdk，也可以将获取好的授权签名通过signData传进去，替代url
+
+```javascript
+var config = {
+    wx:{
+	    debug: false,
+      signData: {
+        corpId: '${corpId}',
+        timestamp: '${timestamp}'
+        nonceStr: '${nonceStr}',
+        signature: '${signature}'
+      }
+	 },//微信jdk初始化参数
+    dd:{},//钉钉jdk初始化参数
+};
+```
+
+
 ## 公共API
 
 SDK提供了如下公共方法，并对他们的入参和出参做了兼容
