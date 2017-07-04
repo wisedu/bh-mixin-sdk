@@ -16,7 +16,7 @@ function getSignData(wxConfig) {
       }).then(({
         data: resp
       }) => {
-        if (resp.status == 200) {
+        if (resp.status == 200 || resp.code == '0') {
           resolve(resp.datas)
         } else {
           reject(resp)
