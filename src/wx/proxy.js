@@ -189,7 +189,9 @@ function proxyJdk(wx, mobileSDK, config) {
                     storeid: 'image'
                 };
 
-                axios.get(config.uploadImgsToEmapUrl, { params: data }).then(function(res) {
+                axios.get(config.uploadImgsToEmapUrl, {
+                    params: data
+                }).then(function(res) {
                     res.data.token = token;
                     resolve(res.data);
                 }, function(res) {
@@ -222,7 +224,7 @@ function proxyJdk(wx, mobileSDK, config) {
     mobileSDK.setTitleText = function(opt = '') {
         return document.title = opt;
     };
-    //获取网络地址
+    //获取当前位置
     mobileSDK.getCurrentPosition = function(successCallback, errorCallback, options) {
         wx.getLocation({
             type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'

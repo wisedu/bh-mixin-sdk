@@ -61,7 +61,7 @@ function proxyJdk(bh, mobileSDK) {
     mobileSDK.setTitleText = function(opt = '') {
         return bh.UI.setTitleText(opt);
     };
-    //获取网络地址
+    //获取当前位置
     mobileSDK.getCurrentPosition = function() {
         bh.geolocation.getCurrentPosition.apply(bh.geolocation, arguments);
     };
