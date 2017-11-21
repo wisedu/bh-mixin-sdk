@@ -62,7 +62,9 @@ function getDdSignData(ddConfig) {
         }
     })
 }
-export default (cb, config) => {
+
+
+const sdk = (cb, config) => {
     if (mixinSdk)
         return mixinSdk;
     mixinSdk = (cb, config) => {
@@ -234,11 +236,13 @@ export default (cb, config) => {
                 }
                 return;
             } else if (isDaliyCampus()) {
-                bhInit(cb, config.https);
+                bhInit(cb, config);
             }
         } else {
-            bhInit(cb, config.https);
+            bhInit(cb, config);
         }
     }
     return mixinSdk(cb, config);
 };
+
+export default sdk;
