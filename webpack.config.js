@@ -7,7 +7,7 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, './lib'),
-    filename: 'index.js',
+    filename: 'BH_MOBILE.js',
     library: 'BH_MOBILE',
     libraryTarget: 'umd'
   },
