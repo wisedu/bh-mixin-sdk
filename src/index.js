@@ -4,6 +4,8 @@ import bhInit from './bh/bh.js';
 import ddInit from './dd/dd.js';
 import wxDefaults from './wx/defaults.js';
 import ddDefaults from './dd/defaults.js';
+import jsonp from 'jsonp'
+import pk from '../package.json'
 
 let mixinSdk = null;
 
@@ -78,6 +80,13 @@ const sdk = (cb, config) => {
         let isWeiXin = () => /micromessenger/.test(navigator.userAgent.toLowerCase());
         let isDingTalk = () => /dingtalk/.test(navigator.userAgent.toLowerCase());
         let isDaliyCampus = () => /wisedu/.test(navigator.userAgent.toLowerCase());
+        //qiyu 2017-12-13 增加数据搜集
+        let sdk = pk.version;
+        let mt = window.MINT ? window.MINT.version : "";
+        let em = window["emap-mobile"] ? window["emap-mobile"].version : "";
+        let rq = window.require ? 1 : 0;
+        jsonp(`http://res.wisedu.com/statistics/mf?wx=${isWeiXin^0}&dd=${isDingTalk^0}&cp=${isDaliyCampus^0}&sdk=${sdk}&mt=${mt}&em=${em}&rq=${rq}`, null, function (err, data) {});
+        //
         if (isWeiXin() || isDingTalk() || isDaliyCampus()) {
             hideMintUIHeader();
             if (isWeiXin()) {

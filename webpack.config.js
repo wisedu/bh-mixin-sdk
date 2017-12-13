@@ -8,7 +8,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './lib'),
     filename: 'BH_MOBILE.js',
-    library: 'BH_MOBILE',
+    library: 'bh-mixin-sdk',
     libraryTarget: 'umd'
   },
   module: {
@@ -16,6 +16,11 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.json$/,
+        loader: 'json-loader',
         exclude: /node_modules/
       }
     ]
