@@ -81,11 +81,13 @@ const sdk = (cb, config) => {
         let isDingTalk = () => /dingtalk/.test(navigator.userAgent.toLowerCase());
         let isDaliyCampus = () => /wisedu/.test(navigator.userAgent.toLowerCase());
         //qiyu 2017-12-13 增加数据搜集
-        let sdk = pk.version;
-        let mt = window.MINT ? window.MINT.version : "";
-        let em = window["emap-mobile"] ? window["emap-mobile"].version : "";
-        let rq = window.require ? 1 : 0;
-        jsonp(`http://res.wisedu.com/statistics/mf?wx=${isWeiXin^0}&dd=${isDingTalk^0}&cp=${isDaliyCampus^0}&sdk=${sdk}&mt=${mt}&em=${em}&rq=${rq}`, null, function (err, data) {});
+        if (["127.0.0.1","localhost","0.0.0.0"].indexOf(window.location.hostname) == -1 ) {
+            let sdk = pk.version;
+            let mt = window.MINT ? window.MINT.version : "";
+            let em = window["emap-mobile"] ? window["emap-mobile"].version : "";
+            let rq = window.require ? 1 : 0;
+            jsonp(`http://res.wisedu.com/statistics/mf?wx=${isWeiXin^0}&dd=${isDingTalk^0}&cp=${isDaliyCampus^0}&sdk=${sdk}&mt=${mt}&em=${em}&rq=${rq}`, null, function (err, data) {});
+        }
         //
         if (isWeiXin() || isDingTalk() || isDaliyCampus()) {
             hideMintUIHeader();
