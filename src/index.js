@@ -153,8 +153,9 @@ const sdk = (cb, config) => {
                             corp: wxConfig.corp
                         });
                     })
+                }else{
+                    bhInit(cb, config);
                 }
-                return;
             } else if (isDingTalk()) {
                 if (config.dd) {
                     let ddConfig = Object.assign(ddDefaults, config.dd);
@@ -244,8 +245,9 @@ const sdk = (cb, config) => {
                             corp: ddConfig.corp
                         });
                     });
+                }else{
+                    bhInit(cb, config);
                 }
-                return;
             } else if (isDaliyCampus()) {
                 bhInit(cb, config);
             }
