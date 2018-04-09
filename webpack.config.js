@@ -7,7 +7,7 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, './lib'),
-    filename: 'BH_MOBILE.js',
+    filename: 'BH_MOBILE_SDK.js',
     library: 'bh-mixin-sdk',
     libraryTarget: 'umd'
   },
@@ -25,6 +25,7 @@ module.exports = {
       }
     ]
   },
+  devtool: '#source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
@@ -32,6 +33,7 @@ module.exports = {
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
       compress: {
         warnings: false
       }
