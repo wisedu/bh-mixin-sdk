@@ -19,6 +19,7 @@ export default (callback, config = {}, dconfig = {}) => {
       });
     };
   } else {
+    let wx = window.require('WEIXIN');
     wx.config(config);
     wx.ready(() => {
       var mobileSDK = {};

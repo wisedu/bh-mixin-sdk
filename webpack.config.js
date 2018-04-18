@@ -7,7 +7,7 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, './lib'),
-    filename: 'BH_MOBILE_SDK.js',
+    filename: 'BH_MIXIN_SDK.js',
     library: 'bh-mixin-sdk',
     libraryTarget: 'umd'
   },
