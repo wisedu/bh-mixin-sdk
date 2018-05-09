@@ -180,14 +180,15 @@ function proxyJdk(wx, mobileSDK, config) {
                 if (!/^http/.test(emapPrefixPath)) {
                     emapPrefixPath = location.origin + '/' + emapPrefixPath;
                 }
-                let data = {
+                let uploadConfig = Object.assign({}, opt.config);
+                let data = Object.assign(uploadConfig, {
                     serverIds: serverIds.join(','),
                     emapPrefixPath: config.emapPrefixPath,
                     token: token,
                     scope: scope,
                     corp: config.corp,
                     storeid: 'image'
-                };
+                });
 
                 axios.get(config.uploadImgsToEmapUrl, {
                     params: data
