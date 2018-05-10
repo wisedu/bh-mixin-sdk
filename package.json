@@ -1,8 +1,8 @@
 {
   "name": "bh-mixin-sdk",
-  "version": "0.2.54",
+  "version": "0.2.55",
   "description": "wisedu mixin sdk",
-  "main": "lib/BH_MOBILE.js",
+  "main": "lib/BH_MIXIN_SDK.js",
   "files": [
     "lib",
     "src"
