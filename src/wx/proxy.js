@@ -193,7 +193,9 @@ function proxyJdk(wx, mobileSDK, config) {
                 axios.get(config.uploadImgsToEmapUrl, {
                     params: data
                 }).then(function(res) {
-                    res.data.token = token;
+                    if (res.code === '0' || res.success) {
+                        res.data.token = token;
+                    }
                     resolve(res.data);
                 }, function(res) {
                     reject(res.data);
