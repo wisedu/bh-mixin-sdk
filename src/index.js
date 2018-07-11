@@ -134,7 +134,8 @@ const sdk = (cb, config) => {
                             'openProductSpecificView',
                             'addCard',
                             'chooseCard',
-                            'openCard'
+                            'openCard',
+                            'previewFile'
                         ];
                         if (/iphone/.test(navigator.userAgent.toLowerCase())) {
                             jsApiList.push('getLocalImgData');
