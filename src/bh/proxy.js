@@ -55,6 +55,8 @@ function proxyJdk(bh, mobileSDK) {
     };
     //上传图片到emap
     mobileSDK.uploadImgsToEmap = function(opt) {
+        //console.log('mobileSDK.uploadImgsToEmap');
+        //console.log(opt);
         return bh.wisedu.uploadToEMAP(opt.host, opt.urls, opt.config || {});
     };
     //改变标题
