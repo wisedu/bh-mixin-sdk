@@ -193,8 +193,12 @@ function proxyJdk(wx, mobileSDK, config) {
                 axios.get(config.uploadImgsToEmapUrl, {
                     params: data
                 }).then(function(res) {
-                    if (res.code === '0' || res.success) {
+                    //res是请求的最外层返回，res.data才到数据层。
+                    //之前的判断是拿不到res.success这个对象的，所以会有部分（也没搞明白为什么只有部分应用暴露了这个问题）报错没有取到token
+                    if (res.code === '0' || res.success || res.data.code === '0' || res.data.success) {
                         res.data.token = token;
+                    }else {
+                        res.data.msg = "上传失败，未获取到token"
                     }
                     resolve(res.data);
                 }, function(res) {
