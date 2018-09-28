@@ -86,7 +86,7 @@ const sdk = (cb, config) => {
             let mt = window.MINT ? window.MINT.version : "";
             let em = window["emap-mobile"] ? window["emap-mobile"].version : "";
             let rq = window.require ? 1 : 0;
-            jsonp(`//res.wisedu.com/statistics/mf?wx=${isWeiXin()^0}&dd=${isDingTalk()^0}&cp=${isDaliyCampus()^0}&sdk=${sdk}&mt=${mt}&em=${em}&rq=${rq}`, null, function (err, data) {});
+            // jsonp(`//cdnres.campusphere.cn/statistics/mf?wx=${isWeiXin()^0}&dd=${isDingTalk()^0}&cp=${isDaliyCampus()^0}&sdk=${sdk}&mt=${mt}&em=${em}&rq=${rq}`, null, function (err, data) {});
         }
         //
         if (isWeiXin() || isDingTalk() || isDaliyCampus()) {
