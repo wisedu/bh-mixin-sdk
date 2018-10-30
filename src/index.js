@@ -142,6 +142,7 @@ const sdk = (cb, config) => {
                         }
                         wxInit(cb, {
                             debug: false,
+                            beta: true,
                             appId: signData.corpId,
                             timestamp: signData.timestamp,
                             nonceStr: signData.nonceStr,
