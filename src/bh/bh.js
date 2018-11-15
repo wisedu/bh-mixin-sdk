@@ -10,7 +10,7 @@ export default function(callback, config = {}) {
             proxy(sdk, mobileSDK);
             global.BH_MIXIN_SDK = mobileSDK;
             callback({
-                type: 'success',
+                type: 'bh-success',
                 sdk: mobileSDK
             });
         } else {

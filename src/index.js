@@ -2,6 +2,7 @@ import axios from 'axios';
 import wxInit from './wx/wx.js';
 import bhInit from './bh/bh.js';
 import ddInit from './dd/dd.js';
+import ltInit from './lt/lt.js';
 import wxDefaults from './wx/defaults.js';
 import ddDefaults from './dd/defaults.js';
 import jsonp from 'jsonp'
@@ -80,6 +81,8 @@ const sdk = (cb, config) => {
         let isWeiXin = () => /micromessenger/.test(navigator.userAgent.toLowerCase());
         let isDingTalk = () => /dingtalk/.test(navigator.userAgent.toLowerCase());
         let isDaliyCampus = () => /wisedu/.test(navigator.userAgent.toLowerCase());
+        let isLt = () => /lantumobilecampus/.test(navigator.userAgent.toLowerCase());
+
         //qiyu 2017-12-13 增加数据搜集
         if (["127.0.0.1","localhost","0.0.0.0"].indexOf(window.location.hostname) == -1 ) {
             let sdk = pk.version;
@@ -89,7 +92,7 @@ const sdk = (cb, config) => {
             // jsonp(`//cdnres.campusphere.cn/statistics/mf?wx=${isWeiXin()^0}&dd=${isDingTalk()^0}&cp=${isDaliyCampus()^0}&sdk=${sdk}&mt=${mt}&em=${em}&rq=${rq}`, null, function (err, data) {});
         }
         //
-        if (isWeiXin() || isDingTalk() || isDaliyCampus()) {
+        if (isWeiXin() || isDingTalk() || isDaliyCampus() || isLt()) {
             hideMintUIHeader();
             if (isWeiXin()) {
                 if (config.wx) {
@@ -252,6 +255,8 @@ const sdk = (cb, config) => {
                 }
             } else if (isDaliyCampus()) {
                 bhInit(cb, config);
+            } else if (isLt()) {
+                ltInit(cb, config);
             }
         } else {
             bhInit(cb, config);
