@@ -157,7 +157,11 @@ function proxyJdk(wx, mobileSDK, config) {
             needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
             scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
             success: function(res) {
-                callback && callback(res.resultStr);
+                if(res.resultStr.indexOf(',')>-1){
+                    callback && callback(res.resultStr.split(',')[1]);
+                }else {
+                    callback && callback(res.resultStr);
+                } 
             }
         });
     };
@@ -246,6 +250,26 @@ function proxyJdk(wx, mobileSDK, config) {
             }
         });
     };
+    mobileSDK.share = function(param){
+        var share = { 
+            title: param.title,       // 分享标题
+            desc: param.desc,   // 分享描述
+            link: param.link,       // 分享链接 默认以当前链接
+            imgUrl: param.imgUrl,// 分享图标
+            // 用户确认分享后执行的回调函数
+            success: function () {
+                console.log('分享到朋友成功');
+            },
+            // 用户取消分享后执行的回调函数
+            cancel: function () {
+              console.log('分享到朋友取消');
+            }
+        };
+        wx.onMenuShareAppMessage(share); // 分享给朋友
+        wx.onMenuShareTimeline(share);  // 朋友圈
+        wx.onMenuShareQQ(share);  // QQ
+        wx.onMenuShareQZone(share);  // QQ空间
+    }
 }
 
 export default proxyJdk;

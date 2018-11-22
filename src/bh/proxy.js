@@ -67,6 +67,14 @@ function proxyJdk(bh, mobileSDK) {
     mobileSDK.getCurrentPosition = function() {
         bh.geolocation.getCurrentPosition.apply(bh.geolocation, arguments);
     };
+    mobileSDK.share = function(param){
+        bh.social.mamp.social.shareAll ({
+            title:param.title,
+            content:param.desc,
+            iconUrl:param.imgUrl,
+            linkUrl:param.link
+        });
+    }
 }
 
 export default proxyJdk;
