@@ -1,6 +1,6 @@
 # Wisedu Mobile JavaScript SDK
 
-这是个兼容包，包含微信和今日校园的所有sdk，并且提供了公共方法，未来会补上钉钉的jdk
+这是个兼容包，包含微信、钉钉和今日校园的sdk，并且提供了公共方法
 ,内部依赖bh-mobile-sdk(今日校园)和微信的sdk
 
 
