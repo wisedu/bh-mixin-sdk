@@ -135,7 +135,9 @@ const sdk = (cb, config) => {
                             'addCard',
                             'chooseCard',
                             'openCard',
-                            'previewFile'
+                            'previewFile',
+                            'updateAppMessageShareData',
+                            'updateTimelineShareData'
                         ];
                         if (/iphone/.test(navigator.userAgent.toLowerCase())) {
                             jsApiList.push('getLocalImgData');
