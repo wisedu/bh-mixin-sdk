@@ -30,7 +30,13 @@ function proxyJdk(lt, mobileSDK, config) {
     };
 
     //拍照
-    mobileSDK.takeCamera = function(callback, config = { allowEdit: false }) {
+    mobileSDK.takeCamera = function(callback, maxNumber) {
+        var config = { 
+            allowEdit: false,
+            width: 720,
+            height: 720,
+            quality: 0.88
+        }
         lt.h5.call("takePhoto", config, function(ret){
             // 根据返回结果计算图片大小
             function getFileSizeFromBase64 (b64) {
@@ -52,7 +58,13 @@ function proxyJdk(lt, mobileSDK, config) {
     };
 
     //选择照片
-    mobileSDK.takePhoto = function(callback, config = { allowEdit: false }) {
+    mobileSDK.takePhoto = function(callback, maxNumber) {
+        var config = { 
+            allowEdit: false,
+            width: 720,
+            height: 720,
+            quality: 1
+        }
         lt.h5.call("pickPhoto", config, function(ret){
             // 根据返回结果计算图片大小
             function getFileSizeFromBase64 (b64) {
@@ -77,6 +89,10 @@ function proxyJdk(lt, mobileSDK, config) {
     mobileSDK.preViewImages = function() {
         var args = arguments;
         var infos = [];
+        console.log("---args---")        
+        console.log(args)        
+        console.log("---getType(args[0])---")        
+        console.log(getType(args[0]))   
         if (getType(args[0]) === 'array') {
             infos = args[0];
         }
@@ -88,7 +104,11 @@ function proxyJdk(lt, mobileSDK, config) {
             // let urls = infos.map(function(item) {
             //     return item.url;
             // });
-            lt.h5.call("viewFullImg", infos[showIndex]);
+            console.log("---infos---")        
+            console.log(infos)
+            console.log("---showIndex---")        
+            console.log(showIndex)
+            lt.h5.call("viewFullImg", infos[showIndex].url);
         }
     };
 
