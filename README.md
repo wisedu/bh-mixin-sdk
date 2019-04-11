@@ -162,4 +162,17 @@ SDK.uploadImgsToEmap({
 SDK.setTitleText('移动迎新');
 ```
 
+#
+#
+
+
+**`getDeviceId(callback)`**
+获取设备uuid
+
+```
+SDK.getDeviceId(function(data){
+
+});
+```
+
 
