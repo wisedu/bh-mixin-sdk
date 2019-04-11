@@ -170,8 +170,8 @@ SDK.setTitleText('移动迎新');
 获取设备uuid
 
 ```
-SDK.getDeviceId(function(data){
-
+SDK.getDeviceId(function(res){
+    var uuid = res.data.uuid;
 });
 ```
 
