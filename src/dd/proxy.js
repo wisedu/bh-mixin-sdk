@@ -294,6 +294,27 @@ function proxyJdk(dd, mobileSDK, config) {
             }
         });
     };
+    //获取设备Id
+    mobileSDK.getDeviceId = function(callback) {
+        if(typeof callback === 'function'){
+            dd.device.base.getUUID({
+                onSuccess : function(data) {
+                    callback({
+                        type: 'success',
+                        data: {
+                            uuid: _res.uuid
+                        }
+                    });
+                },
+                onFail : function(err) {
+                    callback({
+                        type: 'error',
+                        message: err
+                    });
+                }
+            });
+        }
+    };
 }
 
 export default proxyJdk;

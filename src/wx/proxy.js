@@ -161,7 +161,7 @@ function proxyJdk(wx, mobileSDK, config) {
                     callback && callback(res.resultStr.split(',')[1]);
                 }else {
                     callback && callback(res.resultStr);
-                } 
+                }
             }
         });
     };
@@ -250,6 +250,27 @@ function proxyJdk(wx, mobileSDK, config) {
             }
         });
     };
+    //获取设备Id
+    mobileSDK.getDeviceId = function(callback) {
+        if(typeof callback === 'function'){
+            wx.getBeacons({
+                success: function(_res) {
+                    callback({
+                        type: 'success',
+                        data: {
+                            uuid: _res.uuid
+                        }
+                    });
+                },
+                fail: function(err) {
+                    callback({
+                        type: 'error',
+                        message: err
+                    });
+                }
+            });
+        }
+    };
     mobileSDK.share = function(param){
         console.log('设置分享参数');
         //设置分享引导页
@@ -264,7 +285,7 @@ function proxyJdk(wx, mobileSDK, config) {
             body.css('overflow','auto');
             $(".bh-mixin-share").remove();
         });
-        var share = { 
+        var share = {
             title: param.title,       // 分享标题
             desc: param.desc,   // 分享描述
             link: param.link,       // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
@@ -282,7 +303,7 @@ function proxyJdk(wx, mobileSDK, config) {
               $(".bh-mixin-share").remove();
             }
         };
-        
+
         if(wx.updateAppMessageShareData && wx.updateTimelineShareData){
             console.log('新版share接口')
             console.log(share)
@@ -295,7 +316,7 @@ function proxyJdk(wx, mobileSDK, config) {
             wx.onMenuShareTimeline(share);  // 朋友圈
             wx.onMenuShareQQ(share);  // QQ
             wx.onMenuShareQZone(share);  // QQ空间
-        } 
+        }
     }
 }
 
