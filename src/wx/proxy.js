@@ -237,8 +237,18 @@ function proxyJdk(wx, mobileSDK, config) {
     };
     //获取当前位置
     mobileSDK.getCurrentPosition = function(successCallback, errorCallback, options) {
+        /*  微信JSSDK(http://caibaojian.com/wxwiki/0030551f015f01ecaa56d20b88ee3c6cb32503bf.html)
+         *  res 数据结构如下：
+         *  {
+         *      var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+         *      var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+         *      var speed = res.speed; // 速度，以米/每秒计
+         *      var accuracy = res.accuracy; // 位置精度
+         *  }
+         */
+        options = options || {};
         wx.getLocation({
-            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+            type: options.type || 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
             success: function(res) {
                 successCallback && successCallback({
                     timestamp: +new Date(),

@@ -256,38 +256,42 @@ function proxyJdk(dd, mobileSDK, config) {
     };
     //获取当前位置
     mobileSDK.getCurrentPosition = function(successCallback, errorCallback, options) {
+        /**
+         *  钉钉JSSDK文档(https://ding-doc.dingtalk.com/doc#/dev/swk0bg)
+         *  高德坐标 result 结构:
+         *   {
+         *       longitude : Number,
+         *       latitude : Number,
+         *       accuracy : Number,
+         *       address : String,
+         *       province : String,
+         *       city : String,
+         *       district : String,
+         *       road : String,
+         *       netType : String,
+         *       operatorType : String,
+         *       errorMessage : String,
+         *       errorCode : Number,
+         *       isWifiEnabled : Boolean,
+         *       isGpsEnabled : Boolean,
+         *       isFromMock : Boolean,
+         *       provider : wifi|lbs|gps,
+         *       accuracy : Number,
+         *       isMobileEnabled : Boolean
+         *   }
+         *
+         */
+        options = options || {};
         dd.device.geolocation.get({
-            targetAccuracy: 200,
-            coordinate: 1,
-            withReGeocode: Boolean,
-            useCache: true, //默认是true，如果需要频繁获取地理位置，请设置false
+            targetAccuracy: options.targetAccuracy || 200,          // 期望定位精度半径(单位米)，定位结果尽量满足该参数要求，但是不一定能保证小于该误差，开发者需要读取返回结果的 accuracy 字段校验坐标精度；建议按照业务需求设置定位精度，推荐采用200m，可获得较好的精度和较短的响应时长
+            coordinate: options.coordinate || 1,                    // 1：获取高德坐标；0：获取标准坐标；推荐使用高德坐标；标准坐标没有 address 字段
+            withReGeocode: options.withReGeocode || false,            // 是否需要带有逆地理编码信息；该功能需要网络请求，请根据自己的业务场景使用
+            useCache: options.useCache || false,                   //默认是true，如果需要频繁获取地理位置，请设置false
             onSuccess: function(res) {
                 successCallback && successCallback({
                     timestamp: +new Date(),
                     coords: res
                 });
-                /* 高德坐标 result 结构
-                {
-                    longitude : Number,
-                    latitude : Number,
-                    accuracy : Number,
-                    address : String,
-                    province : String,
-                    city : String,
-                    district : String,
-                    road : String,
-                    netType : String,
-                    operatorType : String,
-                    errorMessage : String,
-                    errorCode : Number,
-                    isWifiEnabled : Boolean,
-                    isGpsEnabled : Boolean,
-                    isFromMock : Boolean,
-                    provider : wifi|lbs|gps,
-                    accuracy : Number,
-                    isMobileEnabled : Boolean
-                }
-                */
             },
             onFail: function(err) {
                 errorCallback && errorCallback(err);

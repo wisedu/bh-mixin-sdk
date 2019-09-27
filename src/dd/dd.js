@@ -5,13 +5,9 @@ export default (callback, config = {}, dconfig = {}) => {
   var script = document.createElement("script");
   script.src = url;
   document.head.appendChild(script);
-  //console.log('append------------------')
   script.onload = function() {
-    //console.log('function config-------------');
-    //console.log(config);
     dd.config(config);
     dd.ready(function() {
-      //console.log('ready-start---------')
       var mobileSDK = {};
       proxy(dd, mobileSDK, dconfig);
       global.BH_MIXIN_SDK = mobileSDK;

@@ -63,8 +63,23 @@ function proxyJdk(bh, mobileSDK) {
         return bh.UI.setTitleText(opt);
     };
     //获取当前位置
-    mobileSDK.getCurrentPosition = function() {
-        bh.geolocation.getCurrentPosition.apply(bh.geolocation, arguments);
+    mobileSDK.getCurrentPosition = function(successCallback, errorCallback, options) {
+        // 修改今日校园获取当前位置(http://172.16.2.133:1234/#api-geolocation-__MampGeolocationGetcurrentaddress) 
+        bh.geolocation.checkLocationPermissions(function(result){
+            if(result.status) {
+                bh.geolocation.getCurrentAddress(function(res){
+                    successCallback && successCallback({
+                        timestamp: +new Date(),
+                        coords: res
+                    });
+                },function(err){
+                    errorCallback && errorCallback(err);
+                });
+            }else{
+                alert('您的设备定位权限未开启')
+            }
+        })
+        
     };
     //获取设备Id
     mobileSDK.getDeviceId = function(callback) {
