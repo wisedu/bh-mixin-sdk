@@ -45,6 +45,10 @@ function proxyJdk(bh, mobileSDK) {
     mobileSDK.preViewImages = function() {
         return bh.UI.preViewImages.apply(bh.UI, arguments);
     };
+    // 文件预览
+    mobileSDK.preViewFiles = function() {
+        return bh.UI.filePreview.apply(bh.UI, arguments);
+    }
     //关闭页面
     mobileSDK.closeWebView = function() {
         return bh.UI.closeWebView();
