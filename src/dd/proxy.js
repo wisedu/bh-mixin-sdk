@@ -45,8 +45,8 @@ function proxyJdk(dd, mobileSDK, config) {
                 ]
                 */
                 callback && callback({
-                    base64: res.localIds[0],
-                    url: res.localIds[0]
+                    base64: res[0],
+                    url: res[0]
                 });
             },
             onFail: function(err) {}
