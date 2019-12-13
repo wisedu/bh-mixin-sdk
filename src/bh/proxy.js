@@ -47,7 +47,7 @@ function proxyJdk(bh, mobileSDK) {
     };
     // 文件预览
     mobileSDK.preViewFiles = function() {
-        return bh.UI.filePreview.apply(bh.UI, arguments);
+        return bh.file.filePreview.apply(bh.file, arguments);
     }
     //关闭页面
     mobileSDK.closeWebView = function() {
