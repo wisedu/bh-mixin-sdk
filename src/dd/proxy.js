@@ -147,7 +147,7 @@ function proxyJdk(dd, mobileSDK, config) {
     //扫描二维码或者一维码
     mobileSDK.scan = function(callback) {
         dd.biz.util.scan({
-            type: all, // type 为 all、qrCode、barCode，默认是all。
+            type: "all", // type 为 all、qrCode、barCode，默认是all。
             onSuccess: function(data) {
                 callback && callback(data);
                 //onSuccess将在扫码成功之后回调
