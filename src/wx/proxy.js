@@ -237,7 +237,7 @@ function proxyJdk(wx, mobileSDK, config) {
     };
     //获取当前位置
     mobileSDK.getCurrentPosition = function(successCallback, errorCallback, options) {
-        /*  微信JSSDK(http://caibaojian.com/wxwiki/0030551f015f01ecaa56d20b88ee3c6cb32503bf.html)
+        /*  微信JSSDK(https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html)
          *  res 数据结构如下：
          *  {
          *      var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
