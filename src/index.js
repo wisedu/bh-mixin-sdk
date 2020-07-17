@@ -2,8 +2,10 @@ import axios from 'axios';
 import wxInit from './wx/wx.js';
 import bhInit from './bh/bh.js';
 import ddInit from './dd/dd.js';
+import ybInit from './yb/yb.js';
 import wxDefaults from './wx/defaults.js';
 import ddDefaults from './dd/defaults.js';
+import ybDefaults from './yb/defaults.js';
 import jsonp from 'jsonp'
 import pk from '../package.json'
 
@@ -71,7 +73,7 @@ const sdk = (cb, config) => {
         return mixinSdk;
     mixinSdk = (cb, config) => {
         //如果设置了mt-header,微信钉钉今日校园环境下隐藏，浏览器调试时展示出来
-        var hideMintUIHeader = function() {
+        var hideMintUIHeader = function () {
             var style = document.createElement("style");
             style.type = 'text/css';
             style.innerHTML = "header.mint-header {display: none !important;}";
@@ -80,8 +82,9 @@ const sdk = (cb, config) => {
         let isWeiXin = () => /micromessenger/.test(navigator.userAgent.toLowerCase());
         let isDingTalk = () => /dingtalk/.test(navigator.userAgent.toLowerCase());
         let isDaliyCampus = () => /wisedu/.test(navigator.userAgent.toLowerCase());
+        let isYb = () => /yiban_ios|yiban_android/.test(navigator.userAgent.toLowerCase());
         //qiyu 2017-12-13 增加数据搜集
-        if (["127.0.0.1","localhost","0.0.0.0"].indexOf(window.location.hostname) == -1 ) {
+        if (["127.0.0.1", "localhost", "0.0.0.0"].indexOf(window.location.hostname) == -1) {
             let sdk = pk.version;
             let mt = window.MINT ? window.MINT.version : "";
             let em = window["emap-mobile"] ? window["emap-mobile"].version : "";
@@ -89,7 +92,7 @@ const sdk = (cb, config) => {
             // jsonp(`//cdnres.campusphere.cn/statistics/mf?wx=${isWeiXin()^0}&dd=${isDingTalk()^0}&cp=${isDaliyCampus()^0}&sdk=${sdk}&mt=${mt}&em=${em}&rq=${rq}`, null, function (err, data) {});
         }
         //
-        if (isWeiXin() || isDingTalk() || isDaliyCampus()) {
+        if (isWeiXin() || isDingTalk() || isDaliyCampus() || isYb()) {
             hideMintUIHeader();
             if (isWeiXin()) {
                 if (config.wx) {
@@ -157,7 +160,7 @@ const sdk = (cb, config) => {
                             corp: wxConfig.corp
                         });
                     })
-                }else{
+                } else {
                     bhInit(cb, config);
                 }
             } else if (isDingTalk()) {
@@ -249,11 +252,14 @@ const sdk = (cb, config) => {
                             corp: ddConfig.corp
                         });
                     });
-                }else{
+                } else {
                     bhInit(cb, config);
                 }
             } else if (isDaliyCampus()) {
                 bhInit(cb, config);
+            } else if (isYb()) {
+                let ybConfig = Object.assign(ybDefaults, config.yb);
+                ybInit(cb, ybConfig)
             }
         } else {
             bhInit(cb, config);

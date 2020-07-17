@@ -1,6 +1,6 @@
 # Wisedu Mobile JavaScript SDK
 
-这是个兼容包，包含微信、钉钉和今日校园的sdk，并且提供了公共方法
+这是个兼容包，包含微信、钉钉、今日校园和易班的sdk，并且提供了公共方法
 ,内部依赖bh-mobile-sdk(今日校园)和微信的sdk
 
 
@@ -19,8 +19,9 @@ var config = {
 	    debug: false,
 	    url: 'http://res.wisedu.com:8888/checkSign',//微信认证地址
 	    corp: 'amptest',//认证应用ID
-	 },//微信jdk初始化参数
-    dd:{},//钉钉jdk初始化参数
+	 },//微信sdk初始化参数
+    dd:{},//钉钉sdk初始化参数
+    yb:{},//易班sdk初始化参数
 };
 
 var SDK = null;
@@ -46,8 +47,8 @@ var config = {
         nonceStr: '${nonceStr}',
         signature: '${signature}'
       }
-	 },//微信jdk初始化参数
-    dd:{},//钉钉jdk初始化参数
+	 },//微信sdk初始化参数
+    dd:{},//钉钉sdk初始化参数
 };
 ```
 
