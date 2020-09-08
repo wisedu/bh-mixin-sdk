@@ -1,16 +1,5 @@
 import axios from 'axios';
-
-var getType = function(o) {
-    var type = Object.prototype.toString.call(o).toLocaleLowerCase().replace('[object ', '').replace(']', '');
-    if (type === 'object' && o && o.hasOwnProperty('length')) {
-        return 'array';
-    }
-    return type;
-};
-
-var isIphone = function() {
-    return /iphone/.test(navigator.userAgent.toLowerCase());
-};
+import { getType } from "../utils";
 
 function proxyJdk(dd, mobileSDK, config) {
     console.log('dd config', config);

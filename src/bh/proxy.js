@@ -1,10 +1,4 @@
-var getType = function(o) {
-    var type = Object.prototype.toString.call(o).toLocaleLowerCase().replace('[object ', '').replace(']', '');
-    if (type === 'object' && o && o.hasOwnProperty('length')) {
-        return 'array';
-    }
-    return type;
-};
+import { getType } from "../utils";
 
 function proxyJdk(bh, mobileSDK) {
     mobileSDK.bh = bh;
@@ -68,7 +62,7 @@ function proxyJdk(bh, mobileSDK) {
     };
     //获取当前位置
     mobileSDK.getCurrentPosition = function(successCallback, errorCallback, options) {
-        // 修改今日校园获取当前位置(http://172.16.2.133:1234/#api-geolocation-__MampGeolocationGetcurrentaddress) 
+        // 修改今日校园获取当前位置(http://172.16.2.133:1234/#api-geolocation-__MampGeolocationGetcurrentaddress)
         bh.geolocation.checkLocationPermissions(function(result){
             if(result.status) {
                 bh.geolocation.getCurrentAddress(function(res){
@@ -83,7 +77,7 @@ function proxyJdk(bh, mobileSDK) {
                 alert('您的设备定位权限未开启')
             }
         })
-        
+
     };
     //获取设备Id
     mobileSDK.getDeviceId = function(callback) {

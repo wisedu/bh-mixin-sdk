@@ -1,16 +1,5 @@
 import axios from 'axios';
-
-var getType = function(o) {
-    var type = Object.prototype.toString.call(o).toLocaleLowerCase().replace('[object ', '').replace(']', '');
-    if (type === 'object' && o && o.hasOwnProperty('length')) {
-        return 'array';
-    }
-    return type;
-};
-
-var isIphone = function() {
-    return /iphone/.test(navigator.userAgent.toLowerCase());
-};
+import { getType, isIphone } from "../utils";
 
 function proxyJdk(wx, mobileSDK, config) {
     console.log('wx config', config);
@@ -29,7 +18,7 @@ function proxyJdk(wx, mobileSDK, config) {
         }
         var sizeType = ['original', 'compressed'];
         if (getType(args[1]) === 'array') {
-            callback = args[1];
+            sizeType = args[1];
         }
         if (getType(args[2]) === 'array') {
             sizeType = args[2];
@@ -126,6 +115,74 @@ function proxyJdk(wx, mobileSDK, config) {
             }
         });
     };
+    // 新增一个api给emap-mobile上传组件调用，避免底部2次弹框
+    mobileSDK.takePhotoOrCamera = function(){
+        var args = arguments;
+        var callback;
+        if (getType(args[0]) === 'function') {
+            callback = args[0];
+        }
+
+        var limit = 1;
+        if (getType(args[1]) === 'number') {
+            limit = args[1];
+        }
+
+        var sizeType = ['original', 'compressed'];
+        if (getType(args[1]) === 'array') {
+            sizeType = args[1];
+        }
+        if (getType(args[2]) === 'array') {
+            sizeType = args[2];
+        }
+        wx.chooseImage({
+            count: limit,
+            sizeType: sizeType,
+            sourceType: ['album','camera'],
+            success: function(res) {
+                var imgs = [];
+                var localIds = res.localIds;
+                var cb = function() {
+                    if (imgs.length > 1) {
+                        callback && callback(imgs);
+                    } else {
+                        callback && callback(imgs[0]);
+                    }
+                };
+                if (localIds.length === 0) {
+                    return callback && callback({});
+                }
+                if (isIphone()) {
+                    var getLocalImgData = function() {
+                        var localId = localIds.pop();
+                        wx.getLocalImgData({
+                            localId: localId,
+                            success: function(ret) {
+                                imgs.push({
+                                    base64: ret.localData,
+                                    url: localId
+                                });
+                                if (localIds.length) {
+                                    getLocalImgData();
+                                } else {
+                                    cb();
+                                }
+                            }
+                        });
+                    };
+                    getLocalImgData();
+                } else {
+                    imgs = res.localIds.map(function(item) {
+                        return {
+                            base64: item,
+                            url: item
+                        };
+                    });
+                    cb();
+                }
+            }
+        });
+    }
     //预览图片
     mobileSDK.preViewImages = function() {
         var args = arguments;
