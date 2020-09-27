@@ -69,6 +69,7 @@ function getDdSignData(ddConfig) {
 
 
 const sdk = (cb, config) => {
+    console.log('客户端判断',navigator.userAgent.toLowerCase());
     if (mixinSdk)
         return mixinSdk;
     mixinSdk = (cb, config) => {
@@ -82,7 +83,7 @@ const sdk = (cb, config) => {
         let isWeiXin = () => /micromessenger/.test(navigator.userAgent.toLowerCase());
         let isDingTalk = () => /dingtalk/.test(navigator.userAgent.toLowerCase());
         let isDaliyCampus = () => /wisedu/.test(navigator.userAgent.toLowerCase());
-        let isYb = () => /yiban_ios|yiban_android/.test(navigator.userAgent.toLowerCase());
+        let isYb = () => /yiban/.test(navigator.userAgent.toLowerCase());
         //qiyu 2017-12-13 增加数据搜集
         if (["127.0.0.1", "localhost", "0.0.0.0"].indexOf(window.location.hostname) == -1) {
             let sdk = pk.version;
