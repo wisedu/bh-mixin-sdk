@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getType } from "../utils";
+import { getType, UUID } from "../utils";
 
 function proxyJdk(dd, mobileSDK, config) {
     console.log('dd config', config);
@@ -158,7 +158,8 @@ function proxyJdk(dd, mobileSDK, config) {
                 if (token) {
                     scope = token.substring(0, token.length - 1);
                 } else {
-                    scope = new Date().getTime() + '' + parseInt(Math.random() * 100).toString();
+                    scope = UUID() + '' + parseInt(Math.random() * 100).toString();
+                        //new Date().getTime() + '' + parseInt(Math.random() * 100).toString();
                     token = scope + 1;
                 }
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getType, isIphone } from "../utils";
+import { getType, isIphone, UUID } from "../utils";
 
 function proxyJdk(wx, mobileSDK, config) {
     console.log('wx config', config);
@@ -233,7 +233,8 @@ function proxyJdk(wx, mobileSDK, config) {
                 if (token) {
                     scope = token.substring(0, token.length - 1);
                 } else {
-                    scope = new Date().getTime() + '' + parseInt(Math.random() * 100).toString();
+                    scope = UUID() + '' + parseInt(Math.random() * 100).toString();
+                        // new Date().getTime() + '' + parseInt(Math.random() * 100).toString();
                     token = scope + 1;
                 }
 

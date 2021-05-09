@@ -30,3 +30,11 @@ export const convertCoords = (coords) => {
     return coords;
   }
 };
+
+const S4 = () => {
+  return (((1 + Math.random()) * 0x10000) | 0).toString(32);
+}
+
+export const UUID = () => {
+  return (S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
+}

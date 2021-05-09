@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getType, convertCoords } from "../utils";
+import { getType, convertCoords, UUID } from "../utils";
 
 function proxyJdk(mobileSDK, config) {
   console.log("yb config", config);
@@ -139,10 +139,8 @@ function proxyJdk(mobileSDK, config) {
         if (token) {
           scope = token.substring(0, token.length - 1);
         } else {
-          scope =
-            new Date().getTime() +
-            "" +
-            parseInt(Math.random() * 100).toString();
+          scope = UUID() + '' + parseInt(Math.random() * 100).toString();
+            // new Date().getTime() + "" + parseInt(Math.random() * 100).toString();
           token = scope + 1;
         }
 
