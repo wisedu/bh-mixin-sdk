@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
-    "bh-mobile-sdk": "^0.3.13",
+    "bh-mobile-sdk": "^0.3.14",
     "jsonp": "^0.2.1"
   }
 }
