@@ -59,6 +59,10 @@ function proxyJdk(wx, mobileSDK, config) {
         if (getType(args[1]) === 'number') {
             limit = args[1];
         }
+        // 2021-08-31 吴志远 微信ios选择图片上传limit只能是9以内的数字
+        if(limit > 9) {
+            limit = 9;
+        }
 
         var sizeType = ['original', 'compressed'];
         if (getType(args[1]) === 'array') {
