@@ -103,28 +103,13 @@ function proxyJdk(mobileSDK, config) {
       //易班预览图片api
       var params = {
         action: "yiban_vr_image",
-        params: { vrurl: urls[showIndex] },
+        params: {
+          vrurl: urls[showIndex],
+        },
         callback: "",
       };
       mobile_api(JSON.stringify(params));
     }
-  };
-  //关闭页面
-  mobileSDK.closeWebView = function () {
-    console.log("关闭页面");
-    back_fun();
-  };
-  //扫描二维码或者一维码
-  mobileSDK.scan = function (callback) {
-    console.log("扫码");
-    //处理回调,二维码中必须包含“yiban_scan_result”标识，返回二维码字符串型内容；否则无该回调，直接以链接解析跳转
-    var originCb = window.getScanResult;
-    window.getScanResult = function (res) {
-      window.getScanResult = originCb;
-      console.log(res);
-      callback && callback(res.replace("yiban_scan_result_", ""));
-    };
-    encode_fun();
   };
   //上传图片到emap
   mobileSDK.uploadImgsToEmap = function (opt) {
@@ -190,65 +175,73 @@ function proxyJdk(mobileSDK, config) {
       uploadImg();
     });
   };
+
+  //关闭页面
+  mobileSDK.closeWebView = function () {
+    try {
+      yiban.close();
+    } catch (err) {
+      alert("系统或设备不支持");
+    }
+  };
+  //扫描二维码或者一维码
+  mobileSDK.scan = function (typeNumber = 1, callback) {
+    // 1=>调用二维码扫描器（文本显示）,0=>调用二维码扫描器（链接跳转）
+    var type = Number(typeNumber);
+    try {
+      if (type) {
+        yiban.scan({
+          success: function (result) {
+            callback && callback(result);
+          },
+          fail: function (error) {
+            alert(error);
+          },
+        });
+      } else {
+        yiban.scan();
+      }
+    } catch (err) {
+      alert("系统或设备不支持");
+    }
+  };
+
   //改变标题
   mobileSDK.setTitleText = function (opt = "") {};
   //获取当前位置
-  mobileSDK.getCurrentPosition = function (
-    successCallback,
-    errorCallback,
-    options
-  ) {
-    console.log("获取当前位置");
-    options = options || {};
-
-    //处理回调,postion  Json  {"longitude":"经度坐标", "latitude":"纬度坐标", "address":"位置名称"}
-    var originCb = window.yibanhtml5location;
-    window.yibanhtml5location = function (res) {
-      window.yibanhtml5location = originCb;
-      console.log("yibanhtml5location:", res);
-      var coordsObj = {
-        longitude: "",
-        latitude: "",
-        address: "",
-      };
-      if (res) {
-        coordsObj = JSON.parse(res);
-      }
-      successCallback &&
-        successCallback({
-          timestamp: +new Date(),
-          // 1：获取高德坐标；0：获取标准坐标，默认高德坐标
-          coords:
-            options.coordinate === 0 ? coordsObj : convertCoords(coordsObj),
-        });
-    };
-    var originErrorCb = window.onerror;
-    window.onerror = function (res) {
-      window.onerror = originErrorCb;
-      console.log("onerror:", res);
-      errorCallback && errorCallback(res);
-    };
-    gethtml5location_fun();
+  mobileSDK.getCurrentPosition = function (successCallback, errorCallback) {
+    try {
+      yiban.getLocation({
+        success: function (result) {
+          successCallback && successCallback(JSON.stringify(result));
+        },
+        fail: function (error) {
+          errorCallback && errorCallback(JSON.stringify(error));
+        },
+      });
+    } catch (err) {
+      errorCallback && errorCallback("系统或设备不支持");
+      // resultHTML.textContent = '{"code":"12000"}';
+    }
   };
-  //获取设备Id
+  //获取设备Id(唯一标识)
   mobileSDK.getDeviceId = function (callback) {
-    console.log("获取设备Id");
-
-    if (typeof callback === "function") {
-      var params = { action: "uuid", params: {}, callback: "onlyid_back" };
-      //处理回调
-      var originCb = window.onlyid_back;
-      window.onlyid_back = function (res) {
-        window.onlyid_back = originCb;
-        console.log("onlyid_back:", res);
-        callback({
-          type: "success",
-          data: {
-            uuid: res, //.uuid
-          },
-        });
-      };
-      mobile_api(JSON.stringify(params));
+    try {
+      yiban.getUUID(function (uuid) {
+        callback && callback(uuid);
+      });
+    } catch (err) {
+      alert("系统或设备不支持");
+    }
+  };
+  // 获取当前用户设备系统信息
+  mobileSDK.getDeviceInfo = function (callback) {
+    try {
+      yiban.getDeviceInfo(function (res) {
+        callback && callback(JSON.stringify(res));
+      });
+    } catch (err) {
+      alert("系统或设备不支持");
     }
   };
 }
